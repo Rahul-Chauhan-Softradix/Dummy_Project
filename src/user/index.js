@@ -20,6 +20,11 @@ const {registerValidator,loginValidator} = require('./user.validator')
         this.router.post('/users/login',schemaValidator(loginValidator), (req,res)=>{
             this.userInstance.userLogin(req,res)
         })
+
+        /** list all users */
+        this.router.post('/users/list',(req,res)=>{
+            this.userInstance.listUser(req,res)
+        })
     }
 }
 

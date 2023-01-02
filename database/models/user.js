@@ -9,6 +9,11 @@ module.exports = (sequelize,DataTypes) =>{
         primaryKey:true,
         type:DataTypes.INTEGER
     },
+    uuid:{
+      type:DataTypes.STRING(50),
+      allowNull:false,
+
+    },
     role_id: {
       type: DataTypes.TINYINT,
       defaultValue: 2,
@@ -37,9 +42,14 @@ module.exports = (sequelize,DataTypes) =>{
     password:{
       type:DataTypes.STRING(100),
       allowNull:false
+    },
+    is_deleted:{
+      type:DataTypes.TINYINT,
+      allowNull:true,
+      defaultValue:0
     }
    
- },{timeStamps:true,paranoid: true,
+ },{timeStamps:true,paranoid: true,underscored:false,
     hooks:{
       beforeCreate: async(user)=>{
         /**  password encryption **/

@@ -1,5 +1,7 @@
 const http = require('http')
 const Server = require('./bin/server')
+const dotenv = require('dotenv');
+const env = dotenv.config();
 
 class Application {
     constructor(){
@@ -12,7 +14,7 @@ class Application {
     }
 
     async initApp(){
-        this.port = 3000;
+        this.port = process.env.PORT;
         this.serverObj = new Server();
         this.app = await this.serverObj.initServer();
         this.app.set('port',this.port);
