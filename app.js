@@ -1,5 +1,6 @@
 const http = require('http')
 const Server = require('./bin/server')
+const Logger = require('./src/helpers/logger')
 const dotenv = require('dotenv');
 const env = dotenv.config();
 
@@ -10,13 +11,15 @@ class Application {
         this.port = "";
         this.server = "";
         this.serverObj = "";
-
+        this.logger = "";
     }
 
     async initApp(){
         this.port = process.env.PORT;
         this.serverObj = new Server();
         this.app = await this.serverObj.initServer();
+        this.logger = new Logger();
+        await this.logger.init();
         this.app.set('port',this.port);
         await this.initAppServer();
     }
@@ -28,6 +31,8 @@ class Application {
         this.bind = typeof this.address === 'string'
         ? `pipe ${this.address}`
         :`port ${this.address.port}`;
+        this.logger.logDebug(`Listening On: ${this.bind}`);
+        this.logger.logInfo(`Server running on: ${this.port}`);
     }
 }
 
@@ -40,6 +45,6 @@ const app = new Application();
 
 // The unhandledRejection listener
 process.on('unhandledRejection', error => {
-	console.error('unhandledRejection', error.message);
+	console.error('unhandledRejection', error);
 });
 

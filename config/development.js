@@ -1,7 +1,8 @@
-import db from './db.js';
+//import db from './db.js';
+const db = require('./db')
 
 module.exports = {
-	port: 3000,
+	port: process.env.port,
 	db:db.development,
 	logger: {
 		maxSize: 512000,

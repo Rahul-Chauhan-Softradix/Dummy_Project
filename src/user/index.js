@@ -10,7 +10,7 @@ const {registerValidator,loginValidator} = require('./user.validator')
         this.userInstance = new userController();
     }
     async routes(){
-        await this.userInstance.init(this.db)
+        await this.userInstance.init(this.db);
 
         /** user registration */
         this.router.post('/users/registration',schemaValidator(registerValidator), (req,res)=>{

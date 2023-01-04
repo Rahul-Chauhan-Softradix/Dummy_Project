@@ -17,15 +17,21 @@
     "babel-runtime": "^6.26.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
+    "config": "^3.3.8",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "from": "^0.1.7",
+    "import": "0.0.6",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.8.0",
     "nodemon": "^2.0.20",
     "path": "^0.12.7",
+    "randomstring": "^1.2.3",
     "sequelize": "^6.28.0",
     "sequelize-cli": "^5.5.1",
-    "uuid-v4": "^0.1.0"
+    "sib-api-v3-sdk": "^8.5.0",
+    "uuid-v4": "^0.1.0",
+    "winston": "^3.8.2"
   }
 }

@@ -1,5 +1,5 @@
-const  config   =  require('../../config/db.js');
-
+const  config   =  require('config');
+//const Sequelize = require('sequelize');
 const {Sequelize,DataTypes}  = require('sequelize');
 
 
@@ -7,8 +7,8 @@ const {Sequelize,DataTypes}  = require('sequelize');
 
     constructor(){
         this.seqClient = null;
-        this.dbConfig = config;
-        this.mysqlConfigClient = this.dbConfig.development.mysql.client;
+        this.dbConfig = config.db;
+        this.mysqlConfigClient = this.dbConfig.mysql.client;
         this.db = {};
         this.isDbRunning = true;
     }
@@ -66,6 +66,14 @@ const {Sequelize,DataTypes}  = require('sequelize');
       this.db.models.Users = require('../../database/models/user.js')(this.seqClient,DataTypes);
 
      this.db.models.Roles = require('../../database/models/roles.js')(this.seqClient,DataTypes);
+
+     this.db.models.Orders = require('../../database/models/orders.js')(this.seqClient,DataTypes)
+
+     /**Associations */
+
+  // this.db.models.Orders.belongsTo(this.db.models.Users,{foreignKey:'user_id'})
+
+ this.db.models.Users.hasMany(this.db.models.Orders,{ foreignKey:'user_id',as:'orderInfo'})
       
       this.db.sqlClient.sync({alter:true});
       }

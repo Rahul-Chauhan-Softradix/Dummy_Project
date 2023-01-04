@@ -1,11 +1,13 @@
 const Services =  require('./user.services.js')
 const bcrypt =  require('bcrypt')
 const uuid = require('uuid-v4')
+const randomstring = require('randomstring')
 const {RESPONSE_CODES,ROLES} = require('../../config/constants')
 const {successResponse,errorResponse} = require('../../config/responseHelper')
 const {CUSTOM_MESSAGES} = require('../../config/customMessages.js')
 const {refreashToken} = require('../services/jwt')
-//const {mailSend} = require("../helpers/nodeMailer")
+const sendinBlue  = require("../helpers/nodeMailer")
+
 
 class User{
     async init(db){
@@ -16,8 +18,9 @@ class User{
     async userRegistration(req,res){
         const body = req.body;
 
-        const {first_name,email,phone_number} = body;
-       // const nodemail = mailSend(body)
+        const {first_name,email,phone_number,password} = body;
+        
+       
         /** check user email */
        let checkUserEmail = await this.services.getByEmail(email)
         if(checkUserEmail){
@@ -28,9 +31,18 @@ class User{
         if(checkPhone){
             return res.send(errorResponse(CUSTOM_MESSAGES.PHONE_NUMBER_EXIST,null,null,RESPONSE_CODES.POST))
          }
+        
+         if(!password){
+            body.password = randomstring.generate(7)
+         }
          body.uuid = uuid()
         const userDetails = await this.services.createUser(body)
-       
+        const to = email ;
+        const subject = "Succesful user registration"
+      const htmlContent = `<html><h1>${body.password}</h1>
+                                  <h2>${body.first_name}</h2>  </html>`
+                                  /** sending mail for user registered successfully */
+       const sendMail = await sendinBlue.sendinBlueMail(to,subject,htmlContent)
         delete userDetails.dataValues.password
         return res.send(successResponse(CUSTOM_MESSAGES.USER_REGISTER_SUCCESS,null,userDetails,RESPONSE_CODES.POST))
     }

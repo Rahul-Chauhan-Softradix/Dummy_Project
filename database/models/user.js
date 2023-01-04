@@ -41,7 +41,7 @@ module.exports = (sequelize,DataTypes) =>{
     },
     password:{
       type:DataTypes.STRING(100),
-      allowNull:false
+      allowNull:true
     },
     is_deleted:{
       type:DataTypes.TINYINT,
@@ -49,7 +49,7 @@ module.exports = (sequelize,DataTypes) =>{
       defaultValue:0
     }
    
- },{timeStamps:true,paranoid: true,underscored:false,
+ },{timeStamps:true,paranoid: true,underscored:true,
     hooks:{
       beforeCreate: async(user)=>{
         /**  password encryption **/

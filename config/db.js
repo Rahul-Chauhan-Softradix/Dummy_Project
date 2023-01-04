@@ -1,5 +1,6 @@
-const dotenv = require('dotenv');
-const env = dotenv.config();
+// const dotenv = require('dotenv');
+// const env = dotenv.config();
+require('dotenv').config();
 
 const db = {
   development:{
