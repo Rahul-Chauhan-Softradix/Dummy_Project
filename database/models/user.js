@@ -4,25 +4,25 @@ const {saltRounds} = require('../../config/keys')
 module.exports = (sequelize,DataTypes) =>{
  const users = sequelize.define('users',{
     id:{
+      type:DataTypes.INTEGER,
+      autoIncrement:true,
         allowNull:false,
-        autoIncrement:true,
-        primaryKey:true,
-        type:DataTypes.INTEGER
+        primaryKey:true
     },
     uuid:{
       type:DataTypes.STRING(50),
-      allowNull:false,
+      allowNull:false
 
     },
     role_id: {
-      type: DataTypes.TINYINT,
+      type: DataTypes.INTEGER(1),
       defaultValue: 2,
-      comment: '1 = Admin, 2= User',
+      comment:"1=admin, 2= User"
     },
     first_name:{
           type:DataTypes.STRING(200),
-            allowNull:false                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-    },
+          allowNull:false
+        },
     last_name:{
       type:DataTypes.STRING(200),
       allowNull:true
@@ -44,7 +44,7 @@ module.exports = (sequelize,DataTypes) =>{
       allowNull:true
     },
     is_deleted:{
-      type:DataTypes.TINYINT,
+      type:DataTypes.BOOLEAN,
       allowNull:true,
       defaultValue:0
     }
@@ -57,8 +57,15 @@ module.exports = (sequelize,DataTypes) =>{
         if (user && user.password) {
           user.password = await bcrypt.hash(user.password, saltRounds);
         }
+      },beforeBulkUpdate:async(user)=>{
+
+        if (user && user.attributes && user.attributes.password) {
+          // eslint-disable-next-line no-param-reassign
+          user.attributes.password = await bcrypt.hash(user.attributes.password, saltRounds);
+        }
       }
     }
 })
  return users;
 }
+

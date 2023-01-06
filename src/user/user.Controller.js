@@ -6,7 +6,7 @@ const {RESPONSE_CODES,ROLES} = require('../../config/constants')
 const {successResponse,errorResponse} = require('../../config/responseHelper')
 const {CUSTOM_MESSAGES} = require('../../config/customMessages.js')
 const {refreashToken} = require('../services/jwt')
-const sendinBlue  = require("../helpers/nodeMailer")
+const sendinBlue  = require("../helpers/sendinblue")
 
 
 class User{
@@ -15,66 +15,23 @@ class User{
         this.Models = db.models;
        await this.services.init(db)
     }
-    async userRegistration(req,res){
-        const body = req.body;
 
-        const {first_name,email,phone_number,password} = body;
-        
-       
-        /** check user email */
-       let checkUserEmail = await this.services.getByEmail(email)
-        if(checkUserEmail){
-           return res.send(errorResponse(CUSTOM_MESSAGES.EMAIL_EXIST,null,null,RESPONSE_CODES.POST))
-        }
-        /** check user phone_number */
-        let checkPhone = await this.services.getByPhone(phone_number)
-        if(checkPhone){
-            return res.send(errorResponse(CUSTOM_MESSAGES.PHONE_NUMBER_EXIST,null,null,RESPONSE_CODES.POST))
-         }
-        
-         if(!password){
-            body.password = randomstring.generate(7)
-         }
-         body.uuid = uuid()
-        const userDetails = await this.services.createUser(body)
-        const to = email ;
-        const subject = "Succesful user registration"
-      const htmlContent = `<html><h1>${body.password}</h1>
-                                  <h2>${body.first_name}</h2>  </html>`
-                                  /** sending mail for user registered successfully */
-       const sendMail = await sendinBlue.sendinBlueMail(to,subject,htmlContent)
-        delete userDetails.dataValues.password
-        return res.send(successResponse(CUSTOM_MESSAGES.USER_REGISTER_SUCCESS,null,userDetails,RESPONSE_CODES.POST))
-    }
-    async userLogin(req,res){
-        const body = req.body;
-        const {email ,password} = body
-        /** check user email */
-        const checkEmail = await this.services.getByEmail(email)
-        if(!checkEmail){
-            return res.send(errorResponse(CUSTOM_MESSAGES.INVALID_EMAIL,null,null,RESPONSE_CODES.POST))
-        }
-        /** check user password */
-        const checkPassword = await bcrypt.compare(password,checkEmail.password)
-        if(!checkPassword){
-           return res.send(errorResponse(CUSTOM_MESSAGES.INVALID_PASSWORD,null,null,RESPONSE_CODES.POST))
-        }
-        /** generate token */
-        const token = refreashToken(checkEmail.dataValues)
-        
-        return res.send(successResponse(CUSTOM_MESSAGES.LOGIN_SUCCESS,null,token,RESPONSE_CODES.POST))
-    }
-
+    
     async listUser(req,res){
-        const {page} = req.body;
+        const {limit,length} = req.body;
         let response = {}
-        let list = await this.services.getUserList(page)
+        let list = await this.services.getUserList(limit,length)
       
         const totalUser = await this.services.countUser()
         response = successResponse(CUSTOM_MESSAGES.SUCCESS, null,list,RESPONSE_CODES.POST)
         response.recordsTotal = totalUser
 
        return res.send(response)
+    }
+
+    async getAllUser(req,res){
+        const user = await this.Models.Users.findAll({where:{role_id: 2}})
+        return res.send({data:user})
     }
 }
 

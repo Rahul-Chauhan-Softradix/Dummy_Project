@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return Promise.all([
-      
+      queryInterface.bulkDelete('roles', null, { truncate:true }),
       queryInterface.bulkInsert('roles', [
         {
           role_id: 1, role: 'Admin', created_at: new Date(), updated_at: new Date(),

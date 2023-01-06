@@ -20,6 +20,7 @@ class Order{
         }
     }
     getAllOrder = async (req,res)=>{
+    
         const userId = req.params.userId
       let data = await this.services.getAll(userId)
 

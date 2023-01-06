@@ -3,7 +3,13 @@ const express = require('express');
 const  bodyParser =  require('body-parser');
 const DB =  require('../src/helpers/db.js');
 const Routes =  require("../src/index.js")
+const swaggerUi = require('swagger-ui-express')
 
+const swaggerDocument = require('../config/swagger.json')
+
+const swaggerSpec = require('../config/swagger')
+
+console.log(swaggerSpec)
 
 class Server {
     constructor(){
@@ -26,6 +32,12 @@ class Server {
             await this.healthCheckRoute();
             await this.healthyDB();
             await this.configureRoutes(this.db);
+
+            // this.app.use('/api-docs', swaggerUi.serve);
+            // this.app.get('/api-docs', swaggerUi.setup(swaggerDocument));
+
+            this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+
 
                 return this.app
         }catch (err){
