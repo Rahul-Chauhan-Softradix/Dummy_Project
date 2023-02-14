@@ -7,9 +7,9 @@ const swaggerUi = require('swagger-ui-express')
 
 const swaggerDocument = require('../config/swagger.json')
 
-const swaggerSpec = require('../config/swagger')
+//const swaggerSpec = require('../config/swagger')
 
-console.log(swaggerSpec)
+import swaggerSpec  from '../config/swagger'
 
 class Server {
     constructor(){

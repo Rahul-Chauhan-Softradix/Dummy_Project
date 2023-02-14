@@ -1,5 +1,5 @@
 /** function for return Success Response */
- successResponse = (msg, title, data, code) => ({
+ const successResponse = (msg, title, data, code) => ({
     status: 1,
     title: title,
     message: msg,

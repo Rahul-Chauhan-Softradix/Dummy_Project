@@ -5,24 +5,27 @@ const options = {
     definition:{
         opneapi:'3.0.0',
         info:{
-            title:"Node js api for Dummy Project",
+          description: "Dummy_Project Api's.",
+            title:"Dummy Project",
             version:'1.0.0'
         },
-        servers:[
-            {
-              url:"localhost:3000/"
-            }
-        ]
+        "schemes": [
+          "http",
+          "https"
+      ],
+      host:`localhost:${process.env.PORT}`,
     },
-    apis:['../src/user/index'],
+    apis:[]
     
 }
+
+// '../src/user/index'
 
 
 const swaggerSpec = swaggerJsdoc(options)
 swaggerSpec.tags = ["admin"]
 
-swaggerSpec.path = {
+swaggerSpec.paths = {
     "/auth/signup": {
         "post": {
           "tags": ["auth"],
@@ -65,18 +68,176 @@ swaggerSpec.path = {
             }
           ]
         }
+      },
+      "/auth/login": {
+        "post": {
+          "tags": ["auth"],
+          "summary": "APi for login",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "type": "object",
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok"
+            }
+          }
+        }
+      },
+      "/auth/user/forgot-password": {
+        "put": {
+          "tags": ["auth"],
+          "summary": "APi for forgot password",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "type": "object",
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok"
+            }
+          }
+        }
+      },
+      "/auth/reset-password/{id}/{token}": {
+        "post": {
+          "tags": ["auth"],
+          "summary": "APi for reset password",
+          "parameters": [
+            {
+                "name": "id",
+                "in": "path",
+                "type": "string",
+                "required": true
+            },
+            {
+                "name": "token",
+                "in": "path",
+                "type": "string",
+                "required": true
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "type": "object",
+              "schema": {
+                "properties": {
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok"
+            }
+          }
+        }
+      },
+      "/users/list": {
+        "post": {
+          "tags": ["user"],
+          "summary": "APi for get user list/pag",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "type": "object",
+              "schema": {
+                "properties": {
+                  "length": {
+                    "type": "string"
+                  },
+                  "limit": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok"
+            }
+          }
+        }
+      },
+      "/order/registration": {
+        "post": {
+          "tags": ["order"],
+          "summary": "APi for create an order",
+          "parameters": [
+            {
+              "name": "body",
+              "in": "body",
+              "required": true,
+              "type": "object",
+              "schema": {
+                "properties": {
+                  "user_id": {
+                    "type": "integer"
+                  },
+                  "ProductName": {
+                    "type": "string"
+                  },
+                  "Price": {
+                    "type": "integer"
+                  },
+                  "Quantity": {
+                    "type": "integer"
+                  },
+                  "totalAmount": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok"
+            }
+          }
+        }
       }
 }
 
-      /**
- * @swagger
- * /user:
- *  get:
- *      summary:This api is used to check
- *      description:This api is used to check
- *      responses:
- *            200:
- *                description: to test get method
- */
+swaggerSpec.securityDefinitions = {
+  "authorization": {
+    "type": "apiKey",
+    "name": "authorization",
+    "in": "header"
+  }
+}
+
 
 module.exports = swaggerSpec

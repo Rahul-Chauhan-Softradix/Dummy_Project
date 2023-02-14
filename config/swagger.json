@@ -6,7 +6,6 @@
     "title": "Dummy_Project"
   },
   "host": "localhost:3000",
-  "host1": "dev-api.uppo.app/",
   "basePath": "",
   "schemes": ["http", "https"],
   "securityDefinitions": {

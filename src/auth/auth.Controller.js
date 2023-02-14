@@ -13,6 +13,8 @@ const { refreashToken , verifyToken} = require("../services/jwt");
 const sendinBlue = require("../helpers/sendinblue");
 const sendGridMail = require("../helpers/sendgrid");
 
+//import demo from "../services/jwt"
+
 class Auth {
   async init(db) {
     this.services = new Services();
@@ -21,7 +23,7 @@ class Auth {
   }
   async userRegistration(req, res) {
     const body = req.body;
-
+    console.log(req.headers)
     const { first_name, email, phone_number, password } = body;
     
     /** check user email */
@@ -41,13 +43,13 @@ class Auth {
     body.uuid = uuid();
     const userDetails = await this.services.createUser(body);
     delete userDetails.dataValues.password;
-    const abc = userDetails
-    console.log(abc)
+
     const to = email;
     const subject = "Succesful user registration";
     const htmlContent = `<html><h1>${body.password}</h1>
                                   <h2>${body.first_name}</h2>  </html>`;
     /** sending mail for user registered successfully */
+  
     const sendMail = await sendinBlue.sendinBlueMail(to, subject, htmlContent);
     // sendGridMail.sendMail({
     //   to: "Ramanrana795@yopmail.com",
@@ -95,7 +97,7 @@ class Auth {
     /** generate token */
     const token = refreashToken(payload,checkEmail.dataValues.password);
     /** forgot password link */
-    const forgotPasswordLink = `${process.env.BACK_END_BASE_URL}reset_password/${id}/${token}`;
+    const forgotPasswordLink = `http://localhost:${process.env.PORT}reset_password/${id}/${token}`;
 
     const htmlContent = `<html> <h1>Here is your one time password link</h1>
         <a href="${forgotPasswordLink}">link text </a> </html>`;
@@ -112,7 +114,7 @@ class Auth {
     const {params,body} = req
 
     const user = await this.services.getUserByID(params.id)
-   const msg = "invalid url"
+  
     
     const verify = verifyToken(params.token, user.dataValues.password)
 

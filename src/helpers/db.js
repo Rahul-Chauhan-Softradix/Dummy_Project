@@ -24,6 +24,7 @@ const {Sequelize,DataTypes}  = require('sequelize');
                   port:this.mysqlConfigClient.port,
                   dialect:this.mysqlConfigClient.dialect,
                   operatorsAliases:0,
+                  logging:true,
                   pool:{
                     min:this.mysqlConfigClient.pool.min,
                     max:this.mysqlConfigClient.pool.max,

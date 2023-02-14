@@ -7,7 +7,7 @@ const {successResponse,errorResponse} = require('../../config/responseHelper')
 const {CUSTOM_MESSAGES} = require('../../config/customMessages.js')
 const {refreashToken} = require('../services/jwt')
 const sendinBlue  = require("../helpers/sendinblue")
-
+const request = require('request')
 
 class User{
     async init(db){
@@ -30,8 +30,29 @@ class User{
     }
 
     async getAllUser(req,res){
-        const user = await this.Models.Users.findAll({where:{role_id: 2}})
-        return res.send({data:user})
+        // const user = await this.Models.Users.findAll({where:{role_id: 2}})
+        // return res.send({data:user})
+
+       
+
+// Request URL
+var url = 'https://jsonplaceholder.typicode.com/todos/1';
+
+request(url, (error, response, body)=>{
+	return new Promise(async (resolve, reject) => {
+	// Printing the error if occurred
+	if(error) console.log(error)
+
+	// Printing status code
+	console.log(response.statusCode);
+	
+	// Printing body
+    resolve(JSON.parse(body));
+	console.log(body);
+    })
+});
+
+    
     }
 }
 
